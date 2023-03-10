@@ -1,9 +1,22 @@
 import { Component } from 'react';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+
+import {
+  SearchBarStyled,
+  SearchForm,
+  SearchButton,
+  SearchButtonLabel,
+  SearchFormInput,
+} from './SearchBarStyled';
 
 export class SearchBar extends Component {
   state = {
     searchQuery: '',
+  };
+
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
   };
 
   handleSearchChange = event => {
@@ -13,7 +26,6 @@ export class SearchBar extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
-    console.log('wtf?');
     if (this.state.searchQuery.trim() === '') {
       toast.error('🍳Please enter somthing to search!', {
         theme: 'dark',
@@ -26,20 +38,23 @@ export class SearchBar extends Component {
 
   render() {
     return (
-      <section className="Searchbar">
-        <form className="SearchForm" onSubmit={this.handleSubmit}>
-          <button className="SearchForm-button" type="submit">
-            <span className="SearchForm-button-label">Find</span>
-          </button>
-          <input
+      <SearchBarStyled className="Searchbar">
+        <SearchForm className="SearchForm" onSubmit={this.handleSubmit}>
+          <SearchButton className="SearchForm-button" type="submit">
+            <SearchButtonLabel className="SearchForm-button-label">
+              Find
+            </SearchButtonLabel>
+          </SearchButton>
+          <SearchFormInput
+            placeholder="Hello I am Image Search!"
             className="SearchForm-input"
             type="text"
             name="pokemonName"
             value={this.state.searchQuery}
             onChange={this.handleSearchChange}
           />
-        </form>
-      </section>
+        </SearchForm>
+      </SearchBarStyled>
     );
   }
 }
