@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { FetchImagesFromApi } from 'components/services/Fetch-Api';
@@ -15,6 +15,7 @@ export class ImageGallery extends Component {
     images: [],
     status: 'idle',
     isLoading: false,
+    totalHits: 0,
   };
 
   static propTypes = {
@@ -32,6 +33,7 @@ export class ImageGallery extends Component {
         isLoading: false,
         images: [],
         currentPage: 1,
+        totalHits: 0,
       });
 
       try {
@@ -46,6 +48,7 @@ export class ImageGallery extends Component {
           images: response.data.hits,
           currentPage: response.currentPage,
           status: 'resolve',
+          totalHits: response.data.totalHits,
         });
       } catch (error) {
         this.setState({ status: 'rejected' });
@@ -81,8 +84,10 @@ export class ImageGallery extends Component {
   };
 
   render() {
-    const { images, status, isLoading } = this.state;
+    const { images, status, isLoading, totalHits } = this.state;
     const { onModal } = this.props;
+    console.log(totalHits);
+
     return (
       <>
         {status === 'rejected' && (
@@ -101,7 +106,7 @@ export class ImageGallery extends Component {
               <ImageGalleryItem images={images} onModal={onModal} />
             </ImageGalleryStyled>
             <ButtonWraper>
-              {isLoading ? (
+              {isLoading && (
                 <ThreeCircles
                   height="80"
                   width="80"
@@ -110,7 +115,8 @@ export class ImageGallery extends Component {
                   innerCircleColor="#260a8d"
                   middleCircleColor="#6a0474"
                 />
-              ) : (
+              )}
+              {!isLoading && images.length < totalHits && (
                 <Button onClick={this.onButtonClick} />
               )}
             </ButtonWraper>
