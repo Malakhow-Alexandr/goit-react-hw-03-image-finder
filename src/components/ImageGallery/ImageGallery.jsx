@@ -44,6 +44,7 @@ export class ImageGallery extends Component {
           this.setState({ status: 'rejected' });
           return;
         }
+        toast.success(`Good we found ${response.data.totalHits} images`);
         this.setState({
           images: response.data.hits,
           currentPage: response.currentPage,
@@ -86,7 +87,6 @@ export class ImageGallery extends Component {
   render() {
     const { images, status, isLoading, totalHits } = this.state;
     const { onModal } = this.props;
-    console.log(totalHits);
 
     return (
       <>
